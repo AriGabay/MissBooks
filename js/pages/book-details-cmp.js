@@ -61,13 +61,11 @@ export default {
     price() {
       if (this.bookModal.listPrice.currencyCode === 'USD') {
         return this.bookModal.listPrice.amount + '$';
-      }
-      if (this.bookModal.listPrice.currencyCode === 'ILS') {
+      } else if (this.bookModal.listPrice.currencyCode === 'ILS') {
         return this.bookModal.listPrice.amount + '₪';
-      }
-      if (this.bookModal.listPrice.currencyCode === 'EUR') {
+      } else if (this.bookModal.listPrice.currencyCode === 'EUR') {
         return this.bookModal.listPrice.amount + '€';
-      }
+      } else return '?';
     },
     pageCount() {
       if (this.bookModal.pageCount > 500) return 'Long reading';

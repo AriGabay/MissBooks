@@ -10,6 +10,7 @@ export const bookService = {
   getEmptyBook,
   getById,
   addReview,
+  addGoogleBook,
 };
 
 function query() {
@@ -21,9 +22,12 @@ function remove(bookId) {
 }
 
 function save(book) {
+  console.log('book:', book);
   if (book.id) {
+    console.log('put in progress');
     return storageService.put(BOOKS_KEY, book);
   } else {
+    console.log('post in progress');
     return storageService.post(BOOKS_KEY, book);
   }
 }
@@ -34,6 +38,44 @@ function getEmptyBook() {
 
 function getById(id) {
   return storageService.get(BOOKS_KEY, id);
+}
+function addGoogleBook(title, selectedBook) {
+  selectedBook.items.find((book) => {
+    if (book.volumeInfo.title === title) {
+      console.log(book);
+      let newBook = _createBook(
+        book.id,
+        book.volumeInfo.title,
+        'subtitle',
+        book.volumeInfo.authors,
+        book.volumeInfo.publishedDate,
+        book.volumeInfo.description,
+        book.volumeInfo.pageCount,
+        book.volumeInfo.categories,
+        book.volumeInfo.imageLinks.thumbnail,
+        book.volumeInfo.language,
+        book.volumeInfo.maturityRating
+      );
+      storageService.post(BOOKS_KEY, newBook);
+      return book;
+    }
+    // if (book.volumeInfo.title === title) {
+    //   let newBook = _createBook(
+    //     book.id,
+    //     book.volumeInfo.title,
+    //     book.volumeInfo.authors,
+    //     book.volumeInfo.publishedDate,
+    //     book.volumeInfo.description,
+    //     book.volumeInfo.pageCount,
+    //     book.volumeInfo.categories,
+    //     book.volumeInfo.imageLinks.thumbnail,
+    //     book.volumeInfo.imageLinks.language,
+    //     book.volumeInfo.imageLinks.maturityRating
+    //     );
+    //     storageService.post(BOOKS_KEY, newBook);
+    //   return book;
+    // }
+  });
 }
 
 function addReview(bookId, review) {
@@ -459,7 +501,7 @@ function _createBook(
   categories,
   thumbnail,
   language,
-  listPrice,
+  listPrice = 'Sorry, Go to Google for price',
   reviews
 ) {
   const book = {

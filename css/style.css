@@ -18,6 +18,20 @@ body {
   width: 100%;
   height: auto;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* .search-google {
+  align-self: flex-end;
+} */
+.nav-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
   justify-content: flex-start;
   align-items: center;
 }
@@ -27,8 +41,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-
 }
 
 nav .main-title {
