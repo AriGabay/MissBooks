@@ -1,11 +1,13 @@
 import longText from '../cmps/long-text-cmp.js';
 import reviewAdd from '../cmps/review-add-cmp.js';
+import nextBackPage from '../cmps/next-back-page.cmp.js';
 import { bookService } from '../services/book-services.js';
 import { eventBus } from '../services/event-bus-service.js';
 export default {
   template: `
   <div v-if="bookModal" class="book-details">
     <div class="information">
+      <next-back-page :bookId="bookModal.id" />
       <h2>Title: {{bookModal.title}}</h2>
       <review-add @changeInput="review"/>
       <p>Subtitle: {{bookModal.subtitle}}</p>
@@ -52,6 +54,13 @@ export default {
         this.bookModal = book;
       });
     },
+    loadBook() {
+      const id = this.$route.params.bookId;
+      bookService.getById(id).then((book) => {
+        this.bookModal = book;
+        // this.nextBookId = bookService.getNextBookId(book.id)
+      });
+    },
   },
   computed: {
     colorPrice() {
@@ -85,5 +94,12 @@ export default {
   components: {
     longText,
     reviewAdd,
+    nextBackPage,
+  },
+  watch: {
+    '$route.params.id'(id) {
+      console.log('Route...');
+      this.loadBook(id);
+    },
   },
 };

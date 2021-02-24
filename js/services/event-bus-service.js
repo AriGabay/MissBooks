@@ -1,4 +1,5 @@
-export const eventBus = new Vue()
+console.log('2');
+export const eventBus = new Vue();
 
 // eventBus.$on('puk', (str) => {
 //     console.log('someone just puked!!', str)

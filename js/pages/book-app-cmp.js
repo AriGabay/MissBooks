@@ -1,6 +1,7 @@
 import { bookService } from '../services/book-services.js';
 import bookList from '../cmps/books-list-cmp.js';
 import bookFilter from '../cmps/book-filter.cmp.js';
+import { eventBus } from '../services/event-bus-service.js';
 export default {
   template: `
   <main>
@@ -17,6 +18,37 @@ export default {
   methods: {
     setFilter(filterBy) {
       this.filterBy = filterBy;
+    },
+    nextPage(currId) {
+      console.log('currId:', currId);
+      console.log('Next Page!!');
+      const newBook = bookService.query().then((book) => {
+        let idx = book.findIndex((book) => {
+          return book.id === currId;
+        });
+        let backBook = book[idx + 1];
+        return backBook;
+      });
+      newBook.then((res) => {
+        console.log(res);
+      });
+      newBook.then((book) => {
+        this.$router.push(book.id);
+      });
+    },
+    backPage(currId) {
+      console.log('currId:', currId);
+      console.log('back Page!!');
+      const newBook = bookService.query().then((book) => {
+        let idx = book.findIndex((book) => {
+          return book.id === currId;
+        });
+        let backBook = book[idx - 1];
+        return backBook;
+      });
+      newBook.then((book) => {
+        this.$router.push(book.id);
+      });
     },
   },
   computed: {
@@ -43,6 +75,9 @@ export default {
   created() {
     bookService.query().then((books) => {
       this.books = books;
+      console.log('3');
+      eventBus.$on('backPage', this.backPage);
+      eventBus.$on('nextPage', this.nextPage);
     });
   },
 };
